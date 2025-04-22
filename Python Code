@@ -110,6 +110,19 @@ plt.tight_layout()
 plt.show()
 
 
+# 5. Top 5 Products by Sales
+top_products = df.groupby('Product Name')['Sales'].sum().sort_values(ascending=False).head(5)
+print("\nTop 5 Products by Sales:")
+print(top_products)
+
+top_products.plot(kind='bar', title='Top 5 Products by Sales', figsize=(8,5))
+plt.ylabel('Sales')
+plt.tight_layout()
+plt.show()
+
+
+
+
 
 
 # 6. Heatmap of correlation
