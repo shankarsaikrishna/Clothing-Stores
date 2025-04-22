@@ -63,16 +63,6 @@ print(df.describe())
 # --------------------- VISUAL ANALYSIS ---------------------
 
 
-# 1. Line chart: Monthly Sales Trend
-monthly_sales = df.groupby(['Year', 'Month'])['Sales'].sum().reset_index()
-monthly_sales['Month_Year'] = monthly_sales['Year'].astype(str) + '-' + monthly_sales['Month'].astype(str)
-
-plt.figure(figsize=(12, 5))
-sns.lineplot(data=monthly_sales, x='Month_Year', y='Sales', marker='o')
-plt.title('Monthly Sales Trend')
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
 
 
 
