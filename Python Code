@@ -1,0 +1,134 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset (replace with your correct path)
+df = pd.read_excel('C:\\Users\\allum\\OneDrive\\shankatint375\Clothing_Stores INT375.xlsx')
+
+# BASIC VIEW 
+print("Data Preview:")
+print(df.head())
+
+# BASIC INFO 
+print("\nBasic Info:")
+print(df.info())
+
+print("\nDataset Description:")
+print(df.describe())
+
+# DUPLICATES 
+print("\nTotal Duplicate Values:", df.duplicated().sum())
+
+#UNIQUE VALUES 
+print("\nUnique Values:")
+for col in ['Region', 'Category', 'Sub-Category']:
+    if col in df.columns:
+        print(f"{col}: {df[col].unique()}")
+
+#COUNT PLOTS 
+if 'Category' in df.columns:
+    sns.countplot(x='Category', data=df)
+    plt.title('Product Category Count')
+    plt.show()
+
+# NULL VALUES
+print("\nTotal Null Values Before Replacement:")
+print(df.isnull().sum())
+
+#NULL VALUE HANDLIING
+
+# Fill all null values with 0 temporarily
+df.replace(np.nan, '0', inplace=True)
+
+# Example: handle specific column like 'Ship Mode' or 'Segment'
+if 'Ship Mode' in df.columns:
+    df['Ship Mode'] = df['Ship Mode'].astype(str)
+    df['Ship Mode'] = df['Ship Mode'].replace('0', 'Unknown')
+
+# Similarly, for 'Category'
+if 'Category' in df.columns:
+    df['Category'] = df['Category'].astype(str)
+    df['Category'] = df['Category'].replace('0', 'Unknown')
+
+#  NULL VALUES AFTER REPLACEMENT
+print("\nNull Values After Replacement:")
+print(df.isnull().sum())
+
+
+#BASIC STATS 
+print("\nSummary Statistics:")
+print(df.describe())
+
+# --------------------- VISUAL ANALYSIS ---------------------
+
+
+# 1. Line chart: Monthly Sales Trend
+monthly_sales = df.groupby(['Year', 'Month'])['Sales'].sum().reset_index()
+monthly_sales['Month_Year'] = monthly_sales['Year'].astype(str) + '-' + monthly_sales['Month'].astype(str)
+
+plt.figure(figsize=(12, 5))
+sns.lineplot(data=monthly_sales, x='Month_Year', y='Sales', marker='o')
+plt.title('Monthly Sales Trend')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+
+
+# 2. Bar plot: Sales and Profit by Region
+region_sales = df.groupby('Region')[['Sales', 'Profit']].sum().reset_index()
+
+region_sales.plot(x='Region', kind='bar', figsize=(10,6))
+plt.title("Sales & Profit by Region")
+plt.ylabel("Amount")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
+
+
+
+# 3. Pie chart: Category-wise Sales
+category_sales = df.groupby('Category')['Sales'].sum()
+
+plt.figure(figsize=(6, 6))
+category_sales.plot.pie(autopct='%1.1f%%', startangle=140)
+plt.title('Sales by Category')
+plt.ylabel('')
+plt.show()
+
+
+
+
+# 4. Box Plot: Profit by Category
+plt.figure(figsize=(8, 5))
+sns.boxplot(data=df, x='Category', y='Profit')
+plt.title('Profit Spread by Category')
+plt.tight_layout()
+plt.show()
+
+
+
+# 5. Top 5 Products by Sales
+top_products = df.groupby('Product Name')['Sales'].sum().sort_values(ascending=False).head(5)
+print("\nTop 5 Products by Sales:")
+print(top_products)
+
+top_products.plot(kind='bar', title='Top 5 Products by Sales', figsize=(8,5))
+plt.ylabel('Sales')
+plt.tight_layout()
+plt.show()
+
+
+
+
+# 6. Heatmap of correlation
+plt.figure(figsize=(10, 6))
+sns.heatmap(df[['Sales', 'Profit', 'Discount', 'Quantity']].corr(), annot=True, cmap='coolwarm')
+plt.title('Correlation Heatmap')
+plt.show()
+
+
+
+
+
