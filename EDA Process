@@ -1,0 +1,61 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset (replace with your correct path)
+df = pd.read_excel('C:\\Users\\allum\\OneDrive\\shankatint375\Clothing_Stores INT375.xlsx')
+
+# BASIC VIEW 
+print("Data Preview:")
+print(df.head())
+
+# BASIC INFO 
+print("\nBasic Info:")
+print(df.info())
+
+print("\nDataset Description:")
+print(df.describe())
+
+# DUPLICATES 
+print("\nTotal Duplicate Values:", df.duplicated().sum())
+
+#UNIQUE VALUES 
+print("\nUnique Values:")
+for col in ['Region', 'Category', 'Sub-Category']:
+    if col in df.columns:
+        print(f"{col}: {df[col].unique()}")
+
+#COUNT PLOTS 
+if 'Category' in df.columns:
+    sns.countplot(x='Category', data=df)
+    plt.title('Product Category Count')
+    plt.show()
+
+# NULL VALUES
+print("\nTotal Null Values Before Replacement:")
+print(df.isnull().sum())
+
+#NULL VALUE HANDLIING
+
+# Fill all null values with 0 temporarily
+df.replace(np.nan, '0', inplace=True)
+
+# Example: handle specific column like 'Ship Mode' or 'Segment'
+if 'Ship Mode' in df.columns:
+    df['Ship Mode'] = df['Ship Mode'].astype(str)
+    df['Ship Mode'] = df['Ship Mode'].replace('0', 'Unknown')
+
+# Similarly, for 'Category'
+if 'Category' in df.columns:
+    df['Category'] = df['Category'].astype(str)
+    df['Category'] = df['Category'].replace('0', 'Unknown')
+
+#  NULL VALUES AFTER REPLACEMENT
+print("\nNull Values After Replacement:")
+print(df.isnull().sum())
+
+
+#BASIC STATS 
+print("\nSummary Statistics:")
+print(df.describe())
