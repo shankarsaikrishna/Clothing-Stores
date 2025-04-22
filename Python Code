@@ -76,6 +76,16 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
 
+# 2. Bar plot: Sales and Profit by Region
+region_sales = df.groupby('Region')[['Sales', 'Profit']].sum().reset_index()
+
+region_sales.plot(x='Region', kind='bar', figsize=(10,6))
+plt.title("Sales & Profit by Region")
+plt.ylabel("Amount")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
+
 
 
 
